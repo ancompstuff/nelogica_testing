@@ -16,13 +16,14 @@ from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib import colors
 
 
+
 def generate_zigzag_pdf_report(symbol: str, timeframe: str, sweep_df: pd.DataFrame, valid_swings: dict,
-                               adr_5d: float, output_filename: str, output_dir: str = os.path.join("results", "zigzag")):
+                               adr_5d: float, output_filename: str, output_dir: str = os.path.join("results", "zigzag", "results")):
     """
     Generates a PDF analysis document containing visual distribution charts and parameter sweep tables.
-    Automatically creates the target directory structure (defaults to results/zigzag).
+    Automatically creates the target directory structure (defaults to results/zigzag/results).
     """
-    # Create directory tree automatically (e.g., results/zigzag)
+    # Create directory tree automatically (e.g., results/zigzag/results)
     os.makedirs(output_dir, exist_ok=True)
 
     # Resolve full output paths inside target directory
