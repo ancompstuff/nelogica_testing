@@ -5,13 +5,19 @@ Batch execution entry point for ZigZag swing sensitivity analysis.
 """
 
 import os
+from pathlib import Path
+
 from data_loader import read_b3_data
 from zigzag_engine import run_automatic_threshold_sweep
 from zigzag_pdf_generator import generate_zigzag_pdf_report
 
 
+BASE_DIR = Path(__file__).resolve().parent
+OUTPUT_DIR = BASE_DIR / "results"
+
+
 def run_zigzag_pipeline():
-    output_dir = os.path.join("results", "zigzag")
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
 
     symbols = ['WINFUT', 'WDOFUT', 'PETR4', 'VALE3', 'ITUB4']
     timeframes = ['5min', '1min']
@@ -33,7 +39,7 @@ def run_zigzag_pipeline():
                 print(f"5-Day Average Daily Range (ADR_5d): {adr_5d:.2f} pts")
                 print(sweep_df.to_string(index=False))
 
-                # 4. Export PDF Report to results/zigzag/
+                # 4. Export PDF Report to zigzag/results/
                 pdf_name = f"{symbol}_{tf}_zigzag_analysis.pdf"
                 generate_zigzag_pdf_report(
                     symbol=symbol,
@@ -42,9 +48,9 @@ def run_zigzag_pipeline():
                     valid_swings=valid_swings,
                     adr_5d=adr_5d,
                     output_filename=pdf_name,
-                    output_dir=output_dir
+                    output_dir=str(OUTPUT_DIR)
                 )
-                print(f" PDF Report saved: {os.path.join(output_dir, pdf_name)}")
+                print(f" PDF Report saved: {OUTPUT_DIR / pdf_name}")
 
             except FileNotFoundError:
                 print(f"  Skipping {symbol} ({tf}): File not found at expected location.")
